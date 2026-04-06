@@ -2,12 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>KPSTI AR with YouTube</title>
+  <title>AR Video Play</title>
 
-  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-
-  <!-- MindAR -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
   <style>
@@ -33,57 +30,72 @@
   mindar-image="imageTargetSrc: targets/targets.mind;"
   color-space="sRGB"
   vr-mode-ui="enabled: false"
-  device-orientation-permission-ui="enabled: false"
->
+  device-orientation-permission-ui="enabled: false">
 
-  <!-- PRELOAD MODEL -->
+  <!-- ASSETS -->
   <a-assets>
     <a-asset-item id="model" src="models/model.glb"></a-asset-item>
+
+    <!-- YOUR VIDEO FILE -->
+    <video id="video" src="video.mp4" preload="auto" crossorigin="anonymous"></video>
   </a-assets>
 
-  <!-- CAMERA + CURSOR -->
+  <!-- CAMERA -->
   <a-camera position="0 0 0" look-controls="enabled: false">
     <a-cursor></a-cursor>
   </a-camera>
 
   <!-- MARKER -->
-  <a-entity mindar-image-target="targetIndex: 0" mindar-stable="true">
+  <a-entity mindar-image-target="targetIndex: 0">
 
     <!-- 3D MODEL -->
     <a-gltf-model 
       src="#model"
       position="0 0 -0.5"
-      scale="0.5 0.5 0.5"
-      animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+      scale="0.5 0.5 0.5">
     </a-gltf-model>
 
-    <!-- TEXT -->
-    <a-text 
-      value="KPSTI Info"
-      position="0 0.6 0"
-      align="center"
-      color="#ffffff">
-    </a-text>
+    <!-- VIDEO (HIDDEN FIRST) -->
+    <a-video 
+      id="videoPlane"
+      src="#video"
+      position="0 0 -0.5"
+      width="1"
+      height="0.6"
+      visible="false">
+    </a-video>
 
-    <!-- YOUTUBE BUTTON -->
+    <!-- BUTTON -->
     <a-plane 
-      id="ytButton"
+      id="playButton"
       color="blue"
       position="0 -0.5 0"
       width="0.7"
       height="0.3"
-      text="value: Watch Video; align: center"
-      class="clickable">
+      text="value: Play Video; align: center">
     </a-plane>
 
   </a-entity>
 
 </a-scene>
 
-<!-- CLICK SCRIPT -->
 <script>
-document.querySelector('#ytButton').addEventListener('click', function () {
-  window.open('https://www.youtube.com/watch?v=hWgH44u9-aE&list=RDhWgH44u9-aE&start_radio=1', '_blank');
+const video = document.querySelector('#video');
+const videoPlane = document.querySelector('#videoPlane');
+const button = document.querySelector('#playButton');
+
+// When button clicked
+button.addEventListener('click', function () {
+
+  // Show video
+  videoPlane.setAttribute('visible', true);
+
+  // Hide model (optional)
+  document.querySelector('[gltf-model]').setAttribute('visible', false);
+
+  // Play video
+  video.play();
+
 });
 </script>
 
