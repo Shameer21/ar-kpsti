@@ -2,18 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>KPSTI AR Model</title>
+  <title>KPSTI AR with YouTube Button</title>
 
-  <!-- A-Frame -->
+  <!-- A-Frame Library -->
   <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 
-  <!-- MindAR Image Tracking -->
+  <!-- MindAR (Image Tracking) -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
+  <!-- Fullscreen Fix -->
   <style>
     html, body {
       margin: 0;
-      padding: 0;
       overflow: hidden;
       width: 100%;
       height: 100%;
@@ -29,36 +29,64 @@
 </head>
 
 <body>
-  <a-scene
-    mindar-image="imageTargetSrc: targets/targets.mind;"
-    color-space="sRGB"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
 
-    <!-- Camera -->
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+<a-scene
+  mindar-image="imageTargetSrc: targets/targets.mind;"
+  color-space="sRGB"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+>
 
-    <!-- Preload 3D Model -->
-    <a-assets>
-      <a-asset-item id="model" src="models/model.glb"></a-asset-item>
-    </a-assets>
+  <!-- PRELOAD MODEL -->
+  <a-assets>
+    <a-asset-item id="model" src="models/model.glb"></a-asset-item>
+  </a-assets>
 
-    <!-- Marker Entity -->
-    <a-entity mindar-image-target="targetIndex: 0" mindar-stable="true">
+  <!-- CAMERA + CURSOR (for clicking) -->
+  <a-camera position="0 0 0" look-controls="enabled: false">
+    <a-cursor></a-cursor>
+  </a-camera>
 
-      <!-- 3D Model -->
-      <a-gltf-model 
-        src="#model" 
-        position="0 0 -0.5" 
-        scale="0.5 0.5 0.5"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
-      </a-gltf-model>
+  <!-- MARKER TRACKING -->
+  <a-entity mindar-image-target="targetIndex: 0" mindar-stable="true">
 
-      <!-- Text Label -->
-      <a-text value="KPSTI Info" position="0 0.5 0" align="center" color="#ffffff"></a-text>
+    <!-- 3D MODEL -->
+    <a-gltf-model 
+      src="#model"
+      position="0 0 -0.5"
+      scale="0.5 0.5 0.5"
+      animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+    </a-gltf-model>
 
-    </a-entity>
+    <!-- TEXT -->
+    <a-text 
+      value="KPSTI Info"
+      position="0 0.6 0"
+      align="center"
+      color="#ffffff">
+    </a-text>
 
-  </a-scene>
+    <!-- YOUTUBE BUTTON -->
+    <a-plane 
+      id="ytButton"
+      color="blue"
+      position="0 -0.5 0"
+      width="0.7"
+      height="0.3"
+      text="value: Watch Video; align: center"
+      class="clickable">
+    </a-plane>
+
+  </a-entity>
+
+</a-scene>
+
+<!-- CLICK FUNCTION -->
+<script>
+document.querySelector('#ytButton').addEventListener('click', function () {
+  window.open('https://www.youtube.com/watch?v=YOUR_VIDEO_ID', '_blank');
+});
+</script>
+
 </body>
 </html>
